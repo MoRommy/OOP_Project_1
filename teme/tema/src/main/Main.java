@@ -1,8 +1,10 @@
 package main;
 
-import checker.Checkstyle;
+import actions.Action;
 import checker.Checker;
+import checker.Checkstyle;
 import common.Constants;
+import fileio.ActionInputData;
 import fileio.Input;
 import fileio.InputLoader;
 import fileio.Writer;
@@ -13,6 +15,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -31,7 +34,7 @@ public final class Main {
      * @throws IOException in case of exceptions to reading / writing
      */
     public static void main(final String[] args) throws IOException {
-        File directory = new File(Constants.TESTS_PATH);
+        File inputDirectory = new File(Constants.TESTS_PATH);
         Path path = Paths.get(Constants.RESULT_PATH);
         if (!Files.exists(path)) {
             Files.createDirectories(path);
@@ -42,7 +45,7 @@ public final class Main {
         Checker checker = new Checker();
         checker.deleteFiles(outputDirectory.listFiles());
 
-        for (File file : Objects.requireNonNull(directory.listFiles())) {
+        for (File file : Objects.requireNonNull(inputDirectory.listFiles())) {
 
             String filepath = Constants.OUT_PATH + file.getName();
             File out = new File(filepath);
@@ -62,6 +65,7 @@ public final class Main {
      * @param filePath2 for output file
      * @throws IOException in case of exceptions to reading / writing
      */
+    @SuppressWarnings("unchecked")
     public static void action(final String filePath1,
                               final String filePath2) throws IOException {
         InputLoader inputLoader = new InputLoader(filePath1);
@@ -71,7 +75,11 @@ public final class Main {
         JSONArray arrayResult = new JSONArray();
 
         //TODO add here the entry point to your implementation
-
+        List<ActionInputData> actions = input.getCommands();
+        for (ActionInputData action : actions) {
+            String r = Action.act(input, action);
+            arrayResult.add(fileWriter.writeFile(action.getActionId(), action.getActionType(), r));
+        }
         fileWriter.closeJSON(arrayResult);
     }
 }
