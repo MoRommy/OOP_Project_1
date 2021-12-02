@@ -42,6 +42,14 @@ public final class UserInputData {
         this.ratedMovies = ratedMovies;
     }
 
+    /**
+     *
+     * @param movie add string movie title to favourites
+     */
+    public void addToFavourite(final String movie) {
+        favoriteMovies.add(movie);
+    }
+
     public String getUsername() {
         return username;
     }
