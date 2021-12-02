@@ -41,7 +41,7 @@ public final class MovieInputData extends ShowInput {
                 rate += r;
             }
         }
-        if (rate > 0) {
+        if (rate > 0.0) {
             return rate / getRatings().size();
         }
         return 0.0;

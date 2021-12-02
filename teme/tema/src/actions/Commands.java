@@ -68,7 +68,7 @@ public final class Commands {
                 if (!user.getHistory().containsKey(video)) {
                     return "error -> " + video + " is not seen";
                 }
-                user.getFavoriteMovies().add(video);
+                user.addToFavourite(video);
                 return "success -> " + video + " was added as favourite";
             }
         }
