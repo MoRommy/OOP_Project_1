@@ -1,6 +1,5 @@
 package actions;
 
-import actions.command.Command;
 import fileio.ActionInputData;
 import fileio.Input;
 
@@ -17,19 +16,11 @@ public final class Action {
      * @return result message
      */
     public static String act(final Input input, final ActionInputData action) {
-        switch (action.getActionType()) {
-            case "command":
-                return Command.act(input, action);
-
-            case "query":
-
-                break;
-
-            case "recomandations:":
-
-                break;
-            default:
-        }
-        return "Invalid action!";
+        return switch (action.getActionType()) {
+            case "command" -> Commands.act(input, action);
+            case "query" -> Queries.act(input, action);
+            case "recommendation" -> Recommendations.act(input, action);
+            default -> "Invalid action!";
+        };
     }
 }

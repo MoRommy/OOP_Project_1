@@ -1,17 +1,17 @@
-package actions.command;
+package actions;
 
 import entertainment.Season;
-import fileio.ActionInputData;
 import fileio.Input;
+import fileio.ActionInputData;
+import fileio.MovieInputData;
 import fileio.SerialInputData;
 import fileio.UserInputData;
-import fileio.MovieInputData;
 
-import java.util.List;
+import java.util.ArrayList;
 
-public final class Command {
+public final class Commands {
 
-    private Command() {
+    private Commands() {
 
     }
 
@@ -65,6 +65,9 @@ public final class Command {
                         return "error -> " + video + " is already in favourite list";
                     }
                 }
+                if (!user.getHistory().containsKey(video)) {
+                    return "error -> " + video + " is not seen";
+                }
                 user.getFavoriteMovies().add(video);
                 return "success -> " + video + " was added as favourite";
             }
@@ -83,24 +86,28 @@ public final class Command {
         String username = action.getUsername();
         double rating = action.getGrade();
         int seasonNumber = action.getSeasonNumber();
+        String video2 = "";
+        if (seasonNumber > 0) {
+            video2 = video + seasonNumber;
+        }
         for (UserInputData user : input.getUsers()) {
             if (user.getUsername().equals(username)) {
                 if (!user.getHistory().containsKey(video)) {
                     return "error -> " + video + " is not seen";
                 }
                 for (String movie: user.getRatedMovies()) {
-                    if (movie.equals(video)) {
+                    if (movie.equals(video2)) {
                         return "error -> " + video + " has been already rated";
                     }
                 }
-                user.getRatedMovies().add(video);
+                ArrayList<String> ratedMovies = user.getRatedMovies();
+                ratedMovies.add(video2);
+                user.setRatedMovies(ratedMovies);
                 if (seasonNumber > 0) {
                     for (SerialInputData serial : input.getSerials()) {
                         if (serial.getTitle().equals(video)) {
                             Season season = serial.getSeasons().get(seasonNumber - 1);
-                            List<Double> ratings = season.getRatings();
-                            ratings.add(rating);
-                            season.setRatings(ratings);
+                            season.addRating(rating);
                             return "success -> " + video + " was rated with " + rating + " by "
                                                                                     + username;
                         }

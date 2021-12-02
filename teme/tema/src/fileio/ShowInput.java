@@ -33,6 +33,22 @@ public abstract class ShowInput {
         this.genres = genres;
     }
 
+    /**
+     *
+     * @return
+     */
+    public int getDuration() {
+        return 0;
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Double getRating() {
+        return 0.0;
+    }
+
     public final String getTitle() {
         return title;
     }

@@ -73,6 +73,9 @@ public final class Constants {
     public static final int SINGLE_TEST = 2;
     public static final int LARGE_TEST = 3;
     public static final int MAX_LENGTH = 50;
+    public static final int MAX_INT_COUNTER = 9999;
+    public static final int WORDS_ID = 2;
+    public static final int AWARDS_ID = 3;
 
     // add any constants you think you may use
 }

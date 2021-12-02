@@ -40,6 +40,26 @@ public final class Season {
         return ratings;
     }
 
+    /**
+     *
+     * @param rating
+     */
+    public void addRating(final Double rating) {
+        this.ratings.add(rating);
+    }
+
+    /**
+     *
+     * @return
+     */
+    public Double getRating() {
+        Double rating = 0.0;
+        for (Double r : getRatings()) {
+            rating += r;
+        }
+        return rating / getRatings().size();
+    }
+
     public void setRatings(final List<Double> ratings) {
         this.ratings = ratings;
     }

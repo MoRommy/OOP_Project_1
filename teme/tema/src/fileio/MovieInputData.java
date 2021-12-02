@@ -32,14 +32,19 @@ public final class MovieInputData extends ShowInput {
 
     /**
      *
-     * @return the average rating
+     * @return
      */
-    public double getAverageRating() {
-        Double sum = 0.0;
-        for (Double rate : getRatings()) {
-            sum += rate;
+    public Double getRating() {
+        Double rate = 0.0;
+        for (Double r : getRatings()) {
+            if (r > 0) {
+                rate += r;
+            }
         }
-        return sum / rating.size();
+        if (rate > 0) {
+            return rate / getRatings().size();
+        }
+        return 0.0;
     }
 
     @Override
