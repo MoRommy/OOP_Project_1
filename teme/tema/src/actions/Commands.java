@@ -86,9 +86,9 @@ public final class Commands {
         String username = action.getUsername();
         double rating = action.getGrade();
         int seasonNumber = action.getSeasonNumber();
-        String video2 = "";
+        String video2 = video;
         if (seasonNumber > 0) {
-            video2 = video + seasonNumber;
+            video2 += String.valueOf(seasonNumber);
         }
         for (UserInputData user : input.getUsers()) {
             if (user.getUsername().equals(username)) {
