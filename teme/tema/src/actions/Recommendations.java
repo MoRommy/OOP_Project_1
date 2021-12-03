@@ -5,7 +5,12 @@ import fileio.Input;
 import fileio.ShowInput;
 import fileio.UserInputData;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Collections;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
 
 public final class Recommendations {
 
@@ -108,7 +113,8 @@ public final class Recommendations {
      *
      * @param unseenVideos videos
      */
-    private static void sortByRating(final List<ShowInput> unseenVideos, final String secondCryteria) {
+    private static void sortByRating(final List<ShowInput> unseenVideos,
+                                     final String secondCryteria) {
         unseenVideos.sort((o1, o2) -> {
             if (o1.getRating() > o2.getRating()) {
                 return 1;
@@ -154,9 +160,13 @@ public final class Recommendations {
         return "PopularRecommendation cannot be applied!";
     }
 
-    public static Map<String, Integer> sortByValue(Map<String, Integer> hm)
-    {
-        List<Map.Entry<String, Integer> > list = new LinkedList<>(hm.entrySet());
+    /**
+     *
+     * @param hm map
+     * @return the map sorted by integer value in reverse
+     */
+    public static Map<String, Integer> sortByValue(final Map<String, Integer> hm) {
+        List<Map.Entry<String, Integer>> list = new LinkedList<>(hm.entrySet());
         list.sort(Map.Entry.comparingByValue());
         Collections.reverse(list);
         Map<String, Integer> temp = new LinkedHashMap<>();
@@ -166,12 +176,18 @@ public final class Recommendations {
         return temp;
     }
 
-    public static void increment(Map<String, Integer> map, String key, int n) {
+    /**
+     *
+     * @param map map
+     * @param key string
+     * @param n number of incrementers
+     */
+    public static void increment(final Map<String, Integer> map, final String key, final int n) {
         Integer count = map.getOrDefault(key, 0);
         map.put(key, count + n);
     }
 
-    private static List<String> getMostViewedGenres(Input input) {
+    private static List<String> getMostViewedGenres(final Input input) {
         Map<String, Integer> genresViews = new LinkedHashMap<>();
         for (ShowInput video : input.getMovies()) {
             int totalVideoViews = 0;
@@ -272,7 +288,7 @@ public final class Recommendations {
      * @param videos videos
      * @param genre genre
      */
-    public static void filterVideosByGenre(final List<ShowInput> videos, String genre) {
+    public static void filterVideosByGenre(final List<ShowInput> videos, final String genre) {
         videos.removeIf(video -> !video.getGenres().contains(genre));
     }
 
