@@ -10,10 +10,10 @@ import fileio.UserInputData;
 import fileio.ActorInputData;
 import fileio.ShowInput;
 
-import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Comparator;
 
 import static common.Constants.MAX_INT_COUNTER;
 import static common.Constants.WORDS_ID;
@@ -53,7 +53,16 @@ public final class Queries {
                 users.add(user);
             }
         }
-        users.sort(Comparator.comparingInt(o -> o.getRatedMovies().size()));
+
+        users.sort((o1, o2) -> {
+            if (o1.getRatedMovies().size() > o2.getRatedMovies().size()) {
+                return 1;
+            }
+            if (o1.getRatedMovies().size() < o2.getRatedMovies().size()) {
+                return -1;
+            }
+            return o1.getUsername().compareTo(o2.getUsername());
+        });
         if (action.getSortType().equals("desc")) {
             Collections.reverse(users);
         }
@@ -135,10 +144,17 @@ public final class Queries {
         List<ActorInputData> actors = filterActors(input, action.getFilters());
         if (action.getCriteria().equals("awards")) {
             actors.sort((o1, o2) -> {
-                if (o1.getAwards().size() > o2.getAwards().size()) {
+                int o1awards = 0, o2awards = 0;
+                for (int n : o1.getAwards().values()) {
+                        o1awards += n;
+                }
+                for (int n : o2.getAwards().values()) {
+                    o2awards += n;
+                }
+                if (o1awards > o2awards) {
                     return 1;
                 }
-                if (o1.getAwards().size() < o2.getAwards().size()) {
+                if (o1awards < o2awards) {
                     return -1;
                 }
                 return o1.getName().compareTo(o2.getName());
@@ -231,7 +247,10 @@ public final class Queries {
             int ok = 1;
             if (words != null) {
                 for (String word : words) {
-                    if (!actor.getCareerDescription().contains(word)) {
+                    word = word.toLowerCase();
+                    if (!actor.getCareerDescription().toLowerCase().contains(word + " ")
+                            && !actor.getCareerDescription().toLowerCase().contains(word + ",")
+                            && !actor.getCareerDescription().toLowerCase().contains(word + ".")) {
                         ok = 0;
                         break;
                     }
@@ -283,7 +302,7 @@ public final class Queries {
      * @return shows
      */
     private static String getShowsByLongest(final Input input, final ActionInputData action) {
-        List<ShowInput> shows = filterShows(input, action.getFilters());
+        List<ShowInput> shows = filterShows(input, action.getObjectType(), action.getFilters());
         shows.sort((o1, o2) -> {
             if (o1.getDuration() > o2.getDuration()) {
                 return 1;
@@ -307,7 +326,7 @@ public final class Queries {
      * @return shows
      */
     private static String getShowsByFavorite(final Input input, final ActionInputData action) {
-        List<ShowInput> shows = filterShows(input, action.getFilters());
+        List<ShowInput> shows = filterShows(input, action.getObjectType(), action.getFilters());
         shows.sort((o1, o2) -> {
             int movieso1 = 0, movieso2 = 0;
             for (UserInputData user : input.getUsers()) {
@@ -358,7 +377,7 @@ public final class Queries {
      * @return shows
      */
     private static String getShowsByMostViewed(final Input input, final ActionInputData action) {
-        List<ShowInput> shows = filterShows(input, action.getFilters());
+        List<ShowInput> shows = filterShows(input, action.getObjectType(), action.getFilters());
         shows.sort((o1, o2) -> {
             int movieso1 = 0, movieso2 = 0;
             for (UserInputData user : input.getUsers()) {
@@ -405,7 +424,7 @@ public final class Queries {
      * @return shows
      */
     private static String getShowsByRatings(final Input input, final ActionInputData action) {
-        List<ShowInput> shows = filterShows(input, action.getFilters());
+        List<ShowInput> shows = filterShows(input, action.getObjectType(), action.getFilters());
         shows.sort((o1, o2) -> {
             if (o1.getRating() > o2.getRating()) {
                 return 1;
@@ -449,7 +468,7 @@ public final class Queries {
      * @param input database
      * @param filters filters
      */
-    private static List<ShowInput> filterShows(final Input input,
+    private static List<ShowInput> filterShows(final Input input, final String videoType,
                                                final List<List<String>> filters) {
         List<ShowInput> shows = new ArrayList<>();
         int year = 0;
@@ -458,22 +477,25 @@ public final class Queries {
         }
         String showGenre = filters.get(1).get(0);
 
-        for (ShowInput show : input.getMovies()) {
-            if (show.getYear() == year || year == 0) {
-                for (String genre : show.getGenres()) {
-                    if (genre.equals(showGenre)) {
-                        shows.add(show);
-                        break;
+        if (videoType.equals("movies")) {
+            for (ShowInput show : input.getMovies()) {
+                if (show.getYear() == year || year == 0) {
+                    for (String genre : show.getGenres()) {
+                        if (genre.equals(showGenre) || showGenre == null) {
+                            shows.add(show);
+                            break;
+                        }
                     }
                 }
             }
-        }
-        for (ShowInput show : input.getSerials()) {
-            if (show.getYear() == year || year == 0) {
-                for (String genre : show.getGenres()) {
-                    if (genre.equals(showGenre)) {
-                        shows.add(show);
-                        break;
+        } else {
+            for (ShowInput show : input.getSerials()) {
+                if (show.getYear() == year || year == 0) {
+                    for (String genre : show.getGenres()) {
+                        if (genre.equals(showGenre) || showGenre == null) {
+                            shows.add(show);
+                            break;
+                        }
                     }
                 }
             }

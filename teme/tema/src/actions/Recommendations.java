@@ -101,7 +101,8 @@ public final class Recommendations {
         UserInputData user = getUser(action.getUsername(), input);
         if (user != null) {
             List<ShowInput> unseenVideos = getUnseenVideos(input, user);
-            sortByRating(unseenVideos, "");
+
+            sortByRating(unseenVideos);
             if (unseenVideos.size() > 0) {
                 return "BestRatedUnseenRecommendation result: " + unseenVideos.get(0).getTitle();
             }
@@ -113,20 +114,8 @@ public final class Recommendations {
      *
      * @param unseenVideos videos
      */
-    private static void sortByRating(final List<ShowInput> unseenVideos,
-                                     final String secondCryteria) {
-        unseenVideos.sort((o1, o2) -> {
-            if (o1.getRating() > o2.getRating()) {
-                return 1;
-            }
-            if (o1.getRating() < o2.getRating()) {
-                return -1;
-            }
-            if (secondCryteria.equals("name")) {
-                return o1.getTitle().compareTo(o2.getTitle());
-            }
-            return 0;
-        });
+    private static void sortByRating(final List<ShowInput> unseenVideos) {
+        unseenVideos.sort((o1, o2) -> o2.getRating().compareTo(o1.getRating()));
     }
 
     /**
@@ -240,6 +229,20 @@ public final class Recommendations {
                     }
                 }
             }
+            for (ShowInput video : input.getSerials()) {
+                if (!user.getHistory().containsKey(video.getTitle())) {
+                    int favourites = 0;
+                    for (UserInputData u : input.getUsers()) {
+                        if (u.getFavoriteMovies().contains(video.getTitle())) {
+                            favourites++;
+                        }
+                    }
+                    if (favourites > maxFavourites) {
+                        maxFavourites = favourites;
+                        favoriteVideo = video.getTitle();
+                    }
+                }
+            }
             if (!favoriteVideo.equals("")) {
                 return "FavoriteRecommendation result: " + favoriteVideo;
             }
@@ -258,7 +261,15 @@ public final class Recommendations {
         if (user != null && user.getSubscriptionType().equals("PREMIUM")) {
             List<ShowInput> videos = getUnseenVideos(input, user);
             filterVideosByGenre(videos, action.getGenre());
-            sortByRating(videos, "name");
+            videos.sort((o1, o2) -> {
+                if (o1.getRating() > o2.getRating()) {
+                    return 1;
+                }
+                if (o1.getRating() < o2.getRating()) {
+                    return -1;
+                }
+                return o1.getTitle().compareTo(o2.getTitle());
+            });
             if (videos.size() > 0) {
                 return "SearchRecommendation result: " + createVideosStringResult(videos);
             }

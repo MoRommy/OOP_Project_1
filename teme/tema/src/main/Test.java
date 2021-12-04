@@ -17,7 +17,8 @@ public final class Test {
      * @throws IOException in case of exceptions to reading / writing
      */
     public static void main(final String[] args) throws IOException {
-        Main.action("test_db/test_files/single_query_rating_movie.json", "result/out_1.txt");
+        Main.action("test_db/test_files/large_test_no_8.json",
+                "result/out_1.txt");
 //        File directory = new File(Constants.TESTS_PATH);
 //        File[] inputDir = directory.listFiles();
 //

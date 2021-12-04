@@ -72,3 +72,8 @@ fabric.properties
 
 # Exclude this from ignore
 !checkstyle*.jar
+teme/tema/result/out_favorite_fail_duplicate.json
+teme/tema/result/out_favorite_fail_duplicate.json
+teme/tema/result/out_favorite_fail_duplicate.json
+teme/tema/result/out_favorite_fail_invalid.json
+*.json
