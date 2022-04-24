@@ -1,74 +1,40 @@
-# Homeworks
+# The project is listed in teme/tema directory.
 
-This repository contains (and is updated each university year):
+Object Oriented Programming Course
+Homework - VideosDB
 
- * content of each homework with detailed explanations of the assignments and automated checkers
- * media, such as photos or diagrams, that are used to better portrait examples as well as sources (where need-be - e.g. the UML diagrams can be exported to XML from [draw.io](https://www.draw.io/))
- * skeletons for homeworks which require a starting point
+November 2021
 
-## Repository folder structure
+# Info
+https://ocw.cs.pub.ro/courses/poo-ca-cd/teme/tema
 
-The structure for a current homework is as follows:
-```
-teme
-|
-|	--->	homework*X*-name  [1]
-|		|	--->	checker  [2]
-|		|	--->	media [3]
-|		|	--->	skel  [4]
-|		|		|	---> image-source [5]
-|		|	homework*X*-name  [6]
-|	--->	...
-|	--->	...
-```
+# About the code
 
-The structure for an old or deprecated homework is as follows:
-```
-old
-|	--->	university_year [7]
-|		|	--->	old_homework*X*-name  [1]
-|		|		|	--->	checker  [2]
-|		|		|	--->	media	[3]
-|		|		|	--->	skel	[4]
-|		|		|		|	---> image-source [5]
-|		|		|	old_homework*X*-name  [6]
-|		|	--->	...
-|		|	--->	...
-|	--->	...
-|	--->	...
-```
+We provide the input tests, the logic that parses them and the checker that runs them.
 
-* **[1]** - folder with the homework name and contents (where *X* is the homework number)
-* **[2]** - folder with the checker [if need-be]
-* **[3]** - folder with images and diagrams [if need-be]
-* **[4]** - folder with the skeleton code [if need-be]
-* **[5]** - folder with sources of the images/diagrams [if need-be]
-* **[6]** - file with homework details and exercises - docuwiki code (**must** be the same as the folder name)
-* **[7]** - folder with the university year in which the homework was due
+* test_db - contains the tests in JSON format
+* src
+   * checker - the checker's sources including the checkstyle necessary files, not to be modified
+   * fileio - classes for parsing the input files, not to be modified
+   * common, utils
+        * contain utility classes with constants and static methods
+        * you can add your own functionality in the existing classes or add new classes as well
+   * actor
+        * contains an enum for the types of awards an actor can have - do not modify it
+        * you can add here your actor related classes
+   * entertainment
+        * contains an enum for the supported video genres - do not modify it
+        * class for representing a Season of a tv show - do not modify it
+        * you can add here your entertainment related classes
 
-## Contributing
+We encourage you to organize your implementation in packages based on the functionality their classes offer. Try to keep
+your code modular, readable and documented.
 
-If you are interested in fixing issues, detailing laboratory content or just want to lend a helping hand,
-please see the document [How to Contribute](CONTRIBUTING.md), which covers the following:
+# Testing
 
-* [Coding Guidelines](CONTRIBUTING.md#coding-guidelines)
-* [Submitting pull requests](CONTRIBUTING.md#pull-requests)
+The Main class runs the checker on your implementation. Add the entry point to your implementation in it.
 
-This organization has adopted the [Ethics regulation](http://wiki.cs.pub.ro/_media/studenti/licenta/regulament-comisie-de-etica-upb.pdf) and the [Code of Conduct for Students from the Faculty of Automation and Computers](http://wiki.cs.pub.ro/_media/studenti/licenta/cod-conduita-studenti-acs-.pdf). Failure to comply with or violate the rules set out in any of these documents will result in the sanctions imposed by UPB's internal regulations, such as reprimand, written warning, or expulsion from the University POLITEHNICA of Bucharest.
+Run Main to test your implementation from the IDE or from command line.
 
-## Feedback
-
-* Ask a question on [the Moodle instance of our university](http://cs.curs.pub.ro/).
-* Request a new feature on [GitHub](CONTRIBUTING.md).
-* File a bug in [GitHub Issues](https://github.com/oop-pub/teme/issues).
-
-## Related repositories
-
-* [Laboratories](https://github.com/oop-pub/laboratoare) - content related to laboratories
-* [Wiki](https://github.com/oop-pub/wiki) - content from the [docuwiki instance](http://elf.cs.pub.ro/poo/)
-
-## License
-
-Licensed under the [MIT](LICENSE) License.
-
-
+Run the main method from Test class with the name of the input file from the command line and the result will be written
+to the out.txt file. Thus, you can compare this result with ref.
